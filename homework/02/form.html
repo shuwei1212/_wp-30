@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>問卷調查表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .inline {
+            width: auto;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>問卷調查表</h2>
+
+<form>
+    <!-- 姓名 -->
+    <label>姓名：</label>
+    <input type="text" name="name" placeholder="請輸入姓名" required>
+
+    <!-- 性別 -->
+    <label>性別：</label>
+    <input type="radio" name="gender" value="male" class="inline"> 男
+    <input type="radio" name="gender" value="female" class="inline"> 女
+
+    <!-- 身高 -->
+    <label>身高（cm）：</label>
+    <input type="number" name="height" min="0" max="250">
+
+    <!-- 體重 -->
+    <label>體重（kg）：</label>
+    <input type="number" name="weight" min="0" max="200">
+
+    <!-- 出生日期 -->
+    <label>出生日期：</label>
+    <input type="date" name="birthday">
+
+    <!-- 電話 -->
+    <label>電話：</label>
+    <input type="tel" name="phone" placeholder="0912345678">
+
+    <!-- 電子郵件 -->
+    <label>電子郵件：</label>
+    <input type="email" name="email" placeholder="example@email.com">
+
+    <!-- 工作 -->
+    <label>工作：</label>
+    <select name="job">
+        <option value="">請選擇</option>
+        <option value="student">學生</option>
+        <option value="engineer">工程師</option>
+        <option value="teacher">老師</option>
+        <option value="other">其他</option>
+    </select>
+
+    <!-- 興趣愛好 -->
+    <label>興趣愛好：</label>
+    <input type="checkbox" name="hobby" value="sports" class="inline"> 運動
+    <input type="checkbox" name="hobby" value="music" class="inline"> 音樂
+    <input type="checkbox" name="hobby" value="reading" class="inline"> 閱讀
+    <input type="checkbox" name="hobby" value="game" class="inline"> 遊戲
+
+    <!-- 喜歡的顏色 -->
+    <label>喜歡的顏色：</label>
+    <input type="color" name="color">
+
+    <!-- 滿意度（額外加的 range） -->
+    <label>生活滿意度：</label>
+    <input type="range" name="satisfaction" min="0" max="10">
+
+    <!-- 留言 -->
+    <label>留言區：</label>
+    <textarea name="message" rows="4" placeholder="請輸入您的意見"></textarea>
+
+    <!-- 送出 -->
+    <button type="submit">送出問卷</button>
+</form>
+
+</body>
+</html>
