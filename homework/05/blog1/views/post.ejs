@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %></title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .post { border: 1px solid #ddd; padding: 20px; border-radius: 5px; }
+    .meta { color: #666; font-size: 0.9em; }
+    .content { line-height: 1.6; white-space: pre-wrap; }
+    .btn { display: inline-block; padding: 8px 15px; background: #0066cc; color: white; text-decoration: none; border-radius: 3px; margin-right: 10px; }
+    .btn-delete { background: #cc0000; }
+    .btn-edit { background: #ff9900; }
+    .btn-back { background: #666; }
+  </style>
+</head>
+<body>
+  <div class="post">
+    <h1><%= post.title %></h1>
+    <p class="meta"><%= new Date(post.created_at).toLocaleString('zh-TW') %></p>
+    <div class="content"><%= post.content %></div>
+  </div>
+  <br>
+  <a href="/" class="btn btn-back">返回首頁</a>
+  <a href="/edit/<%= post.id %>" class="btn btn-edit">編輯</a>
+  <form action="/delete/<%= post.id %>" method="POST" style="display:inline;">
+    <button type="submit" class="btn btn-delete" onclick="return confirm('確定要刪除嗎？')">刪除</button>
+  </form>
+</body>
+</html>
