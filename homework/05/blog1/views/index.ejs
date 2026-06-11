@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>網誌首頁</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #333; }
+    .post { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+    .post h2 { margin-top: 0; }
+    .post a { text-decoration: none; color: #0066cc; }
+    .meta { color: #666; font-size: 0.9em; }
+    .btn { display: inline-block; padding: 8px 15px; background: #0066cc; color: white; text-decoration: none; border-radius: 3px; }
+    .btn-delete { background: #cc0000; }
+    .btn-edit { background: #ff9900; }
+  </style>
+</head>
+<body>
+  <h1>我的網誌</h1>
+  <a href="/new" class="btn">發表新文章</a>
+  <hr>
+  <% if (posts.length === 0) { %>
+    <p>尚無文章，趕快發表第一篇吧！</p>
+  <% } else { %>
+    <% posts.forEach(post => { %>
+      <div class="post">
+        <h2><a href="/post/<%= post.id %>"><%= post.title %></a></h2>
+        <p class="meta"><%= new Date(post.created_at).toLocaleString('zh-TW') %></p>
+        <p><%= post.content.substring(0, 100) %>...</p>
+        <a href="/post/<%= post.id %>" class="btn">閱讀更多</a>
+        <a href="/edit/<%= post.id %>" class="btn btn-edit">編輯</a>
+        <form action="/delete/<%= post.id %>" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-delete" onclick="return confirm('確定要刪除嗎？')">刪除</button>
+        </form>
+      </div>
+    <% }) %>
+  <% } %>
+</body>
+</html>

@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作業整理 — 董書瑋</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface2: #222240;
+            --text: #e8e8f0;
+            --text-secondary: #9898b0;
+            --border: #2a2a4a;
+            --accent-green: #00d68f;
+            --accent-orange: #ff9f43;
+            --accent-pink: #ff6b9d;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1f5e 50%, #1a1a2e 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 60px 24px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(162,155,254,0.06) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -20px) rotate(1deg); }
+            66% { transform: translate(-20px, 10px) rotate(-1deg); }
+        }
+        .header-content { position: relative; z-index: 1; }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-top: 8px;
+        }
+        .header .badge {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            background: rgba(108,92,231,0.2);
+            border: 1px solid rgba(108,92,231,0.3);
+            color: var(--primary-light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* Section */
+        .section { margin-bottom: 50px; }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-left: 14px;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .num {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .card-tag {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .tag-html { background: rgba(227,76,38,0.15); color: #e34c26; }
+        .tag-js { background: rgba(247,223,30,0.15); color: #f7df1e; }
+        .tag-node { background: rgba(104,159,56,0.15); color: #68a738; }
+        .tag-fullstack { background: rgba(108,92,231,0.15); color: var(--primary-light); }
+        .tag-python { background: rgba(69,132,186,0.15); color: #4584b6; }
+        .tag-advanced { background: rgba(255,159,67,0.15); color: var(--accent-orange); }
+
+        .card-desc { color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 14px; }
+
+        /* Detail grid */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .detail-item {
+            display: flex;
+            gap: 8px;
+            font-size: 0.88rem;
+        }
+        .detail-label {
+            color: var(--text-secondary);
+            min-width: 64px;
+            flex-shrink: 0;
+        }
+        .detail-value { color: var(--text); }
+
+        /* Code block */
+        .code-block {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 14px 0 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: #cdd6f4;
+        }
+        .code-block .comment { color: #6c7086; }
+        .code-block .keyword { color: #cba6f7; }
+        .code-block .string { color: #a6e3a1; }
+        .code-block .func { color: #89b4fa; }
+        .code-block .number { color: #fab387; }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .tech-list span {
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            background: rgba(108,92,231,0.1);
+            border: 1px solid rgba(108,92,231,0.2);
+            color: var(--primary-light);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0;
+        }
+        .feature-list li {
+            padding: 4px 0 4px 20px;
+            position: relative;
+            font-size: 0.9rem;
+        }
+        .feature-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary-light);
+        }
+
+        /* Learning path table */
+        .path-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .path-table th, .path-table td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .path-table th {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .path-table tr:hover td { background: rgba(108,92,231,0.04); }
+
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .ai-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: border-color 0.2s;
+        }
+        .ai-link:hover { border-color: var(--primary); color: var(--primary-light); }
+
+        /* File list */
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .file-list span {
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.8rem; }
+            .detail-grid { grid-template-columns: 1fr; }
+            .card-header { flex-direction: column; }
+        }
+
+        .version-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .version-item {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+        }
+        .version-item strong { color: var(--primary-light); }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin: 10px 0;
+        }
+        .api-table th, .api-table td {
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+        }
+        .api-table th {
+            background: var(--surface2);
+            font-weight: 500;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <h1>作業整理</h1>
+        <div class="subtitle">網頁設計 — 114 學年度第 2 學期</div>
+        <div class="badge">國立金門大學 資訊工程學系</div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ==================== 基本資訊 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>📋</span> 基本資訊</div>
+        <div class="card">
+            <div class="detail-grid">
+                <div class="detail-item"><span class="detail-label">姓名</span><span class="detail-value">董書瑋</span></div>
+                <div class="detail-item"><span class="detail-label">學校</span><span class="detail-value">國立金門大學 資訊工程學系</span></div>
+                <div class="detail-item"><span class="detail-label">學期</span><span class="detail-value">114 學年度第 2 學期</span></div>
+                <div class="detail-item"><span class="detail-label">課程</span><span class="detail-value">網頁設計</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== AI 輔助學習紀錄 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>🤖</span> AI 輔助學習紀錄</div>
+        <div class="card">
+            <p class="card-desc">本學期所有作業皆使用 AI 工具輔助生成後再自行修改。</p>
+            <div class="ai-links">
+                <a class="ai-link" href="https://gemini.google.com/share/4433c3102012" target="_blank">📎 作業 04 — JS 基礎</a>
+                <a class="ai-link" href="https://gemini.google.com/share/c2f34c52ed01" target="_blank">📎 作業 06 — JS 進階</a>
+                <a class="ai-link" href="https://gemini.google.com/share/e972cd407dc9" target="_blank">📎 作業 07 — Node.js 進階</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 學習路徑總覽 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>🗺️</span> 學習路徑總覽 <span class="num">HTML 基礎 → Node.js → JavaScript → 全端專案</span></div>
+        <div class="card">
+            <table class="path-table">
+                <thead>
+                    <tr><th>#</th><th>作業名稱</th><th>技術棧</th><th>類型</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>01</td><td>HTML 個人履歷</td><td>HTML + CSS</td><td>靜態網頁</td></tr>
+                    <tr><td>02</td><td>HTML 表單</td><td>HTML + CSS + JS</td><td>互動表單</td></tr>
+                    <tr><td>03</td><td>Node.js 入門</td><td>Node.js</td><td>環境驗證</td></tr>
+                    <tr><td>04</td><td>JavaScript 基礎語法</td><td>JavaScript (Node.js)</td><td>程式練習 × 10</td></tr>
+                    <tr><td>05</td><td>Blog 社群部落格</td><td>Express + SQLite + EJS</td><td>全端專案</td></tr>
+                    <tr><td>06</td><td>JavaScript 進階</td><td>JavaScript (Node.js)</td><td>進階練習 × 10</td></tr>
+                    <tr><td>07</td><td>Node.js 進階</td><td>JavaScript (Node.js)</td><td>進階練習 × 10</td></tr>
+                    <tr><td>期中考</td><td>WeiGram 社群平台</td><td>FastAPI + SQLAlchemy + Vanilla JS</td><td>全端專案</td></tr>
+                    <tr><td>期末</td><td>作業整理</td><td>HTML + CSS</td><td>靜態網頁</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== 01. HTML 個人履歷 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>📄</span> 01. HTML 個人履歷</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">個人履歷網頁</div>
+                <div>
+                    <span class="card-tag tag-html">HTML + CSS</span>
+                    <span class="card-tag tag-html">靜態網頁</span>
+                </div>
+            </div>
+            <p class="card-desc">個人履歷網頁，展示個人資料、學歷、工作經歷與專業技能。使用卡片式設計與 CSS 響應式佈局。</p>
+            <div class="tech-list">
+                <span>HTML5</span>
+                <span>CSS Grid</span>
+                <span>Flexbox</span>
+                <span>CSS 變數</span>
+                <span>響應式設計</span>
+            </div>
+            <div class="file-list">
+                <span>aboutme.html</span>
+            </div>
+            <div class="feature-list">
+                <li>個人基本資料展示：姓名、年齡、性別、聯絡方式</li>
+                <li>學歷狀況：目前就讀國立金門大學資工系</li>
+                <li>工作經歷：餐飲集團工作經驗</li>
+                <li>專業技能與證照：語文能力、駕照、興趣專長</li>
+                <li>自我評價：個人特質描述</li>
+            </div>
+            <div class="code-block">
+                <span class="comment">&lt;!-- CSS Grid 響應式佈局 --&gt;</span>
+                .info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 16px;
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 02. HTML 表單 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>📋</span> 02. HTML 表單</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">顧客滿意度調查問卷</div>
+                <div>
+                    <span class="card-tag tag-html">HTML + CSS + JS</span>
+                    <span class="card-tag tag-html">互動表單</span>
+                </div>
+            </div>
+            <p class="card-desc">展示各種 HTML 表單元素的使用與樣式設計，包含文字輸入、下拉選單、單選/複選按鈕、範圍滑桿等。</p>
+            <div class="tech-list">
+                <span>HTML5 Forms</span>
+                <span>CSS 變數</span>
+                <span>Google Fonts</span>
+                <span>:root</span>
+            </div>
+            <div class="file-list">
+                <span>form.html</span>
+            </div>
+            <div class="feature-list">
+                <li>文字輸入欄位：姓名、電子信箱</li>
+                <li>下拉選單：來源管道選擇</li>
+                <li>單選按鈕：滿意度評分</li>
+                <li>複選按鈕：產品特點選擇</li>
+                <li>文字區域：開放式回饋欄位</li>
+            </div>
+            <div class="code-block">
+                <span class="keyword">:root</span> {
+                    <span class="keyword">--primary-color</span>: <span class="number">#6c5ce7</span>;
+                    <span class="keyword">--secondary-color</span>: <span class="number">#a29bfe</span>;
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 03. Node.js 入門 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>🟢</span> 03. Node.js 入門</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Node.js 環境驗證</div>
+                <div><span class="card-tag tag-node">Node.js</span></div>
+            </div>
+            <p class="card-desc">最基礎的 Node.js 練習，用於驗證 Node.js 環境設定是否成功。</p>
+            <div class="tech-list"><span>Node.js</span></div>
+            <div class="file-list"><span>hello.js</span></div>
+            <div class="code-block">
+                console.<span class="func">log</span>(<span class="string">'hello 你好'</span>);
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 04. JavaScript 基礎語法 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>⚡</span> 04. JavaScript 基礎語法</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">JavaScript 程式練習 × 10</div>
+                <div><span class="card-tag tag-js">JavaScript</span></div>
+            </div>
+            <p class="card-desc">10 道 JavaScript 基礎語法練習題，涵蓋條件判斷、迴圈、陣列、物件、JSON 等核心概念。</p>
+            <div class="tech-list">
+                <span>if/else</span>
+                <span>for loop</span>
+                <span>while loop</span>
+                <span>Array</span>
+                <span>Object</span>
+                <span>JSON</span>
+                <span>Function</span>
+            </div>
+            <div class="file-list">
+                <span>score01.js</span><span>score02.js</span><span>score03.js</span>
+                <span>score04.js</span><span>score05.js</span><span>score06.js</span>
+                <span>score07.js</span><span>score08.js</span><span>score09.js</span>
+                <span>score10.js</span>
+            </div>
+            <table class="api-table">
+                <thead><tr><th>#</th><th>主題</th><th>核心概念</th></tr></thead>
+                <tbody>
+                    <tr><td>01</td><td>奇偶數判斷</td><td>if/else</td></tr>
+                    <tr><td>02</td><td>1~100 總和</td><td>for 迴圈</td></tr>
+                    <tr><td>03</td><td>1~10 輸出</td><td>while 迴圈</td></tr>
+                    <tr><td>04</td><td>平方函數</td><td>Function</td></tr>
+                    <tr><td>05</td><td>陣列總和</td><td>Array + for</td></tr>
+                    <tr><td>06</td><td>陣列最大值</td><td>for + if 演算法</td></tr>
+                    <tr><td>07</td><td>物件基本操作</td><td>Object</td></tr>
+                    <tr><td>08</td><td>JSON 轉換</td><td>JSON.stringify / parse</td></tr>
+                    <tr><td>09</td><td>偶數計數</td><td>Array + if</td></tr>
+                    <tr><td>10</td><td>平均分數計算</td><td>Object + Array</td></tr>
+                </tbody>
+            </table>
+            <div class="code-block">
+                <span class="comment">// 奇偶數判斷</span>
+                <span class="keyword">function</span> <span class="func">checkNumber</span>(num) {
+                    <span class="keyword">if</span> (num % <span class="number">2</span> === <span class="number">0</span>) <span class="keyword">return</span> <span class="string">"偶數"</span>;
+                    <span class="keyword">else</span> <span class="keyword">return</span> <span class="string">"奇數"</span>;
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 05. Blog 社群部落格 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>📝</span> 05. Blog 社群部落格</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">社群部落格系統（迭代開發）</div>
+                <div><span class="card-tag tag-fullstack">全端專案</span></div>
+            </div>
+            <p class="card-desc">類似 Threads 的社群部落格系統，採用迭代式開發，分為 4 個版本逐步完善功能。從無認證的簡易部落格逐步發展到具備使用者系統、Threads 風格 UI 的完整社群平台。</p>
+            <div class="tech-list">
+                <span>Express.js</span>
+                <span>SQLite3</span>
+                <span>EJS</span>
+                <span>bcrypt</span>
+                <span>express-session</span>
+                <span>Threads UI</span>
+            </div>
+            <div class="file-list">
+                <span>blog/</span><span>blog1/</span><span>blog2/</span><span>blog3/</span>
+            </div>
+            <div class="version-list">
+                <div class="version-item"><strong>blog1</strong> — 基礎 CRUD，無認證</div>
+                <div class="version-item"><strong>blog2</strong> — 加入 bcrypt 使用者認證</div>
+                <div class="version-item"><strong>blog3</strong> — Threads 風格 UI + 使用者貼文綁定</div>
+                <div class="version-item"><strong>blog</strong> — 完整版（追蹤、個人檔案、按讚）</div>
+            </div>
+            <div class="feature-list">
+                <li>註冊/登入/登出（bcrypt 密碼雜湊）</li>
+                <li>貼文 CRUD（新增、編輯、刪除）</li>
+                <li>個人檔案頁面（/profile/:username）</li>
+                <li>暗色 Threads 風格三欄式佈局</li>
+                <li>Following / Public 貼文分頁</li>
+            </div>
+            <div class="code-block">
+                <span class="comment">// 資料表建立 (SQLite)</span>
+                db.<span class="func">run</span>(<span class="string">`
+                    CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT UNIQUE NOT NULL,
+                    password TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )`</span>);
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 06. JavaScript 進階 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>🔮</span> 06. JavaScript 進階</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">JavaScript 進階概念練習 × 10</div>
+                <div><span class="card-tag tag-advanced">進階 JS</span></div>
+            </div>
+            <p class="card-desc">10 道 JavaScript 進階練習題，聚焦於高階函式（Higher-Order Function）與閉包（Closure）兩大核心概念。</p>
+            <div class="tech-list">
+                <span>Higher-Order Function</span>
+                <span>Closure</span>
+                <span>IIFE</span>
+                <span>map</span>
+                <span>filter</span>
+                <span>reduce</span>
+                <span>setTimeout</span>
+                <span>Callback</span>
+            </div>
+            <div class="file-list">
+                <span>score01.js</span><span>score02.js</span><span>score03.js</span>
+                <span>score04.js</span><span>score05.js</span><span>score06.js</span>
+                <span>score07.js</span><span>score08.js</span><span>score09.js</span>
+                <span>score10.js</span>
+            </div>
+            <table class="api-table">
+                <thead><tr><th>#</th><th>主題</th><th>核心概念</th></tr></thead>
+                <tbody>
+                    <tr><td>01</td><td>高階運算工具</td><td>高階函式（callback）</td></tr>
+                    <tr><td>02</td><td>IIFE 計數器</td><td>即時呼叫函式表達式</td></tr>
+                    <tr><td>03</td><td>折扣計算</td><td>Array.map() + 箭頭函式</td></tr>
+                    <tr><td>04</td><td>陣列變異</td><td>pop / unshift / 傳參考</td></tr>
+                    <tr><td>05</td><td>乘法器</td><td>Closure（閉包）</td></tr>
+                    <tr><td>06</td><td>自訂過濾器</td><td>自實作 myFilter</td></tr>
+                    <tr><td>07</td><td>成人過濾</td><td>Array.filter()</td></tr>
+                    <tr><td>08</td><td>傳值 vs 傳參考</td><td>可變性與重新賦值</td></tr>
+                    <tr><td>09</td><td>延遲執行</td><td>setTimeout + 箭頭函式</td></tr>
+                    <tr><td>10</td><td>購物車折扣</td><td>Callback + reduce</td></tr>
+                </tbody>
+            </table>
+            <div class="code-block">
+                <span class="comment">// Closure 範例</span>
+                <span class="keyword">function</span> <span class="func">multiplier</span>(factor) {
+                    <span class="keyword">return</span> <span class="func">n</span> => n * factor;
+                }
+                <span class="keyword">const</span> double = <span class="func">multiplier</span>(<span class="number">2</span>);
+                console.<span class="func">log</span>(<span class="func">double</span>(<span class="number">10</span>));  <span class="comment">// 20</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 07. Node.js 進階 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>🔄</span> 07. Node.js 進階</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Node.js 進階概念練習 × 10</div>
+                <div><span class="card-tag tag-node">Node.js</span></div>
+            </div>
+            <p class="card-desc">10 道 Node.js 進階練習題，聚焦於物件操作、解構賦值、Callback 回呼模式與非同步處理。</p>
+            <div class="tech-list">
+                <span>物件操作</span>
+                <span>解構賦值</span>
+                <span>Callback</span>
+                <span>map / filter</span>
+                <span>Closure</span>
+                <span>setTimeout</span>
+            </div>
+            <div class="file-list">
+                <span>score01.js</span><span>score02.js</span><span>score03.js</span>
+                <span>score04.js</span><span>score05.js</span><span>score06.js</span>
+                <span>score07.js</span><span>score08.js</span><span>score09.js</span>
+                <span>score10.js</span>
+            </div>
+            <div class="code-block">
+                <span class="comment">// 物件屬性存取（點符號 vs 中括號）</span>
+                <span class="keyword">const</span> post = {
+                    id: <span class="number">1</span>,
+                    title: <span class="string">"Hello World"</span>,
+                    content: <span class="string">"Markdown content"</span>
+                };
+                console.<span class="func">log</span>(post.title);       <span class="comment">// 點符號</span>
+                console.<span class="func">log</span>(post[<span class="string">"title"</span>]);  <span class="comment">// 中括號</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 期中考：WeiGram ==================== -->
+    <div class="section">
+        <div class="section-title"><span>📸</span> 期中考 — WeiGram 社群平台</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Instagram-like 社群媒體網站</div>
+                <div><span class="card-tag tag-python">FastAPI + Python</span></div>
+            </div>
+            <p class="card-desc">以影視為主題的全端社群平台（後期發展為通用社群），讓使用者分享貼文、按讚留言、追蹤好友、私訊聊天。採用 FastAPI + SQLAlchemy + Vanilla JS SPA 架構。</p>
+            <div class="tech-list">
+                <span>FastAPI</span>
+                <span>SQLAlchemy</span>
+                <span>SQLite</span>
+                <span>JWT</span>
+                <span>bcrypt</span>
+                <span>Vanilla JS</span>
+                <span>SPA</span>
+                <span>i18n</span>
+                <span>暗色主題</span>
+            </div>
+            <div class="file-list">
+                <span>backend/main.py</span>
+                <span>backend/models.py</span>
+                <span>backend/auth.py</span>
+                <span>backend/schemas.py</span>
+                <span>backend/database.py</span>
+                <span>frontend/index.html</span>
+                <span>frontend/app.js</span>
+                <span>frontend/style.css</span>
+            </div>
+            <div class="feature-list">
+                <li>使用者認證 — JWT 註冊/登入/登出（30 天有效）</li>
+                <li>貼文系統 — 圖片上傳、按讚、留言（含刪除）</li>
+                <li>動態牆 (Feed) / 探索 (Explore) 雙模式</li>
+                <li>追蹤系統 — 追蹤/取消追蹤</li>
+                <li>個人檔案 — 頭像、自我介紹、貼文牆、編輯</li>
+                <li>即時搜尋 — 依使用者名稱搜尋</li>
+                <li>直接訊息 — 與任何使用者私訊</li>
+                <li>多國語系 — 繁體中文 / 简体中文 / English</li>
+                <li>全站暗色主題 UI</li>
+            </div>
+
+            <div style="margin-top: 14px;">
+                <div style="font-size:0.9rem; font-weight:500; margin-bottom:8px;">📂 資料表設計（SQLAlchemy ORM）</div>
+                <div class="code-block">
+                    <span class="keyword">class</span> <span class="func">User</span>(Base):
+                        __tablename__ = <span class="string">"users"</span>
+                        id       = Column(Integer, primary_key=True)
+                        username = Column(String(<span class="number">50</span>), unique=True)
+                        email    = Column(String(<span class="number">100</span>), unique=True)
+                        hashed_password = Column(String(<span class="number">200</span>))
+                        bio      = Column(Text, default=<span class="string">""</span>)
+                        avatar   = Column(String(<span class="number">200</span>), default=<span class="string">""</span>)
+
+                    <span class="keyword">class</span> <span class="func">Post</span>(Base):
+                        __tablename__ = <span class="string">"posts"</span>
+                        id       = Column(Integer, primary_key=True)
+                        image_url = Column(String(<span class="number">500</span>))
+                        caption  = Column(Text)
+                        user_id  = Column(Integer, ForeignKey(<span class="string">"users.id"</span>))
+
+                    <span class="comment"># Comment, Like, Follow, Message ...</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 14px;">
+                <div style="font-size:0.9rem; font-weight:500; margin-bottom:8px;">🔌 API 端點一覽</div>
+                <table class="api-table">
+                    <thead><tr><th>方法</th><th>路徑</th><th>說明</th></tr></thead>
+                    <tbody>
+                        <tr><td>POST</td><td>/api/register</td><td>註冊</td></tr>
+                        <tr><td>POST</td><td>/api/login</td><td>登入（回傳 JWT）</td></tr>
+                        <tr><td>GET/PUT</td><td>/api/users/me</td><td>取得/更新個人資料</td></tr>
+                        <tr><td>GET</td><td>/api/users/{id}</td><td>取得使用者資料</td></tr>
+                        <tr><td>GET</td><td>/api/users/search/{q}</td><td>搜尋使用者</td></tr>
+                        <tr><td>POST</td><td>/api/posts</td><td>建立貼文（multipart）</td></tr>
+                        <tr><td>GET</td><td>/api/posts / /api/feed</td><td>取得所有貼文 / 追蹤中動態</td></tr>
+                        <tr><td>POST</td><td>/api/posts/{id}/like</td><td>切換讚</td></tr>
+                        <tr><td>POST/DELETE</td><td>/api/posts/{id}/comments</td><td>新增/刪除留言</td></tr>
+                        <tr><td>POST</td><td>/api/follow/{id}</td><td>切換追蹤</td></tr>
+                        <tr><td>POST/GET</td><td>/api/messages</td><td>傳送/取得訊息</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top:14px; padding:12px 16px; background:var(--surface2); border-radius:8px; font-size:0.85rem; color:var(--text-secondary);">
+                💡 <strong style="color:var(--text);">心得：</strong> 本專案使用 Opencode AI 輔助開發，透過條列式需求描述引導生成程式碼，再手動調整。學習到全端開發流程、資料庫設計、SPA 架構與 AI 協作技巧。
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 期末 ==================== -->
+    <div class="section">
+        <div class="section-title"><span>📚</span> 期末 — 作業整理</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">本頁面 — 學期作業總整理</div>
+                <div><span class="card-tag tag-html">HTML + CSS</span></div>
+            </div>
+            <p class="card-desc">將整學期的作業內容系統化整理，包含學習路徑、技術棧分析、程式碼亮點與學習收穫。</p>
+            <div class="tech-list">
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>暗色主題</span>
+                <span>響應式設計</span>
+            </div>
+            <div class="file-list">
+                <span>index.html</span>
+            </div>
+            <div class="code-block">
+                <span class="comment">&lt;!-- 將整學期學習成果彙整為一份可瀏覽的頁面 --&gt;</span>
+                <span class="comment">&lt;!-- 涵蓋 9 個作業項目、3 個 AI 對話紀錄連結 --&gt;</span>
+                <span class="comment">&lt;!-- 技術涵蓋 HTML → CSS → JS → Node.js → 全端 --&gt;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== Footer ==================== -->
+    <footer style="text-align:center; padding:30px 0 10px; border-top:1px solid var(--border); color:var(--text-secondary); font-size:0.85rem;">
+        <p>國立金門大學 資訊工程學系 — 網頁設計 — 114 學年度第 2 學期</p>
+        <p style="margin-top:4px;">董書瑋 &copy; 2026</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
